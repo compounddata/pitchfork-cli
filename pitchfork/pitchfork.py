@@ -171,7 +171,6 @@ def report(ctx, **kwargs):
 @click.option('--address', required=True)
 def report_get(ctx, address):
     resp = ctx.obj.api.get(
-        ctx.obj['url'],
         '{0}/report'.format(ctx.obj.url),
         params=ctx.obj.api.params.update({'address': address})
     )
