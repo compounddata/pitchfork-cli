@@ -162,6 +162,25 @@ def pitchfork(ctx):
 
 @pitchfork.group(chain=True)
 @click.pass_context
+def account(ctx, **kwargs):
+    pass
+
+
+@account.command('register')
+@click.pass_context
+@click.option('--email', required=True)
+def account_register(ctx, email):
+    resp = ctx.obj.api.get(
+        '{0}/account/register'.format(ctx.obj.url),
+        params=ctx.obj.api.params.update({'email': email})
+    )
+    if resp.status_code != 200:
+        raise click.ClickException(resp.json()['messages'])
+    eprint(resp.json()['messages'])
+
+
+@pitchfork.group(chain=True)
+@click.pass_context
 def report(ctx, **kwargs):
     pass
 
