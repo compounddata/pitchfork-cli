@@ -319,11 +319,12 @@ def address_list(ctx):
 @address.command('add')
 @click.pass_context
 @click.option('--address', required=True)
-def address_add(ctx, address):
+@click.option('--schedule-id', required=False, default=None, type=int)
+def address_add(ctx, address, schedule_id):
     resp = requests.post(
         '{0}/address'.format(ctx.obj.api_url),
         auth=ctx.obj.api_auth,
-        params={'address': address}
+        params={'address': address, 'schedule_id': schedule_id}
     )
     if not resp.ok:
         raise click.ClickException(resp.json()['messages'])
@@ -334,7 +335,7 @@ def address_add(ctx, address):
 @address.command('portprobe')
 @click.pass_context
 @click.option('--address', required=True)
-def address_portprobe(ctx, address):
+def address_portprobe(ctx, address, schedule_id):
     resp = requests.get(
         '{0}/portprobe'.format(ctx.obj.api_url),
         auth=ctx.obj.api_auth,
@@ -344,6 +345,26 @@ def address_portprobe(ctx, address):
     if not resp.ok:
         raise click.ClickException(resp.json()['messages'])
     eprint(resp.json()['messages'])
+
+
+@pitchfork.group(chain=True)
+@click.pass_context
+def schedule(ctx, **kwargs):
+    pass
+
+
+@schedule.command('list')
+@click.pass_context
+def schedule_list(ctx):
+    """Return a list of schedules."""
+    resp = requests.get(
+        '{0}/schedule'.format(ctx.obj.api_url),
+        auth=ctx.obj.api_auth
+    )
+    if not resp.ok:
+        raise click.ClickException(resp.json()['messages'])
+    for schedule in resp.json():
+        eprint('{0},{1}'.format(schedule['id'], schedule['name']))
 
 
 if __name__ == '__main__':
