@@ -335,7 +335,7 @@ def address_add(ctx, address, schedule_id):
 @address.command('portprobe')
 @click.pass_context
 @click.option('--address', required=True)
-def address_portprobe(ctx, address, schedule_id):
+def address_portprobe(ctx, address):
     resp = requests.get(
         '{0}/portprobe'.format(ctx.obj.api_url),
         auth=ctx.obj.api_auth,
