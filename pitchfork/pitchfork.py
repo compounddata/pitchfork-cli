@@ -3,7 +3,7 @@ import yaml
 import os
 import requests
 import logging
-import util
+from pitchfork import util
 from jinja2 import Template
 
 
